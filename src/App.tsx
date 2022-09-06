@@ -25,10 +25,13 @@ function App() { //class components
 
     const addTask = (title: string) => {
         setTasks([{
-            id: v1(), title: title, isDone: false
+            id: v1(), title, isDone: false
         }, ...tasks])
     }
 
+    const changeStatus = (taskID: string, isDone: boolean) => {
+        setTasks(tasks.map(t => t.id !== taskID ? t : {...t, isDone}))
+    }
 
     const changeFilter = (filter: FilterValueType) => {
         setFilter(filter)
@@ -63,6 +66,8 @@ function App() { //class components
                 removeTask={removeTask}
                 changeFilter={changeFilter}
                 addTask={addTask}
+                changeStatus={changeStatus}
+                filter={filter}
             />
         </div>
     );
