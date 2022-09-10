@@ -20,7 +20,7 @@ function App() { //class components
 
     const removeTask = (taskID: string) => {
         setTasks(tasks.filter(t => t.id !== taskID)) //10ms
-        // console.log(tasks)
+
     }
 
     const addTask = (title: string) => {
