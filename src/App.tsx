@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
 import TodoList, {TaskType} from "./TodoList";
 import {v1} from "uuid";
+import AddItemForm from "./AddItemForm";
 
 //CLI
 //GUI => CreateReadUpdateD
@@ -74,39 +75,54 @@ function App() { //class components
         // }, ...tasks])
     }
 
-    const changeStatus = (taskId: string, isDone: boolean, todoListId: string) => {
-        // const todoListsTasks = tasks[todoListId]
-        // const updatedTasks = todoListsTasks.map(t => t.id === taskId ? {...t, isDone: isDone} : t)
-        // const copyTask = {...tasks}
-        // copyTask[todoListId] = updatedTasks
-        // setTasks(copyTask)
+    const changeTaskStatus = (taskId: string, isDone: boolean, todoListId: string) => {
+        const todoListsTasks = tasks[todoListId]
+        const updatedTasks = todoListsTasks.map(t => t.id === taskId ? {...t, isDone: isDone} : t)
+        const copyTask = {...tasks}
+        copyTask[todoListId] = updatedTasks
+        setTasks(copyTask)
         //
-        setTasks({...tasks, [todoListId]: tasks[todoListId].map(t => t.id === taskId ? t : {...t, isDone: isDone})})
+        // setTasks({...tasks, [todoListId]: tasks[todoListId].map(t => t.id === taskId ? t : {...t, isDone: isDone})})
     }
 
-    const changeFilter = (filter: FilterValueType, todoListId: string) => {
+    const changeTaskTitle = (taskId: string, title: string, todoListId: string) => {
+        setTasks({...tasks, [todoListId]: tasks[todoListId].map(t => t.id === taskId ? {...t, title} : t)})
+    }
+
+    const changeToDoListFilter = (filter: FilterValueType, todoListId: string) => {
         setTodoLists(todoLists.map(tl => tl.id === todoListId ? {...tl, filter: filter} : tl))
 
         // setFilter(filter)
+    }
+    const changeToDoListTitle = (title: string, todoListId: string) => {
+        setTodoLists(todoLists.map(tl => tl.id === todoListId ? {...tl, filter: filter} : tl))
+        // setFilter(filter)
+    }
+
+    const addTodoList = (title: string) => {
+        const newTodoListId: string = v1()
+        setTodoLists([...todoLists, {id: newTodoListId, title: title, filter: 'all'}])
+        setTasks({...tasks, [newTodoListId]: []})
     }
 
     const removeTodoList = (todoListId: string) => {
         setTodoLists(todoLists.filter(tl => tl.id !== todoListId))
     }
 
-    const getTasksRorToDoList = (todilist: TodoListType) => {
-        switch (todilist.filter) {
-            case "active":
-                return tasks[todilist.id].filter(t => !t.isDone)
-            case "completed":
-                return tasks[todilist.id].filter(t => t.isDone)
-            default:
-                return tasks[todilist.id]
+    useEffect(() => {
+        console.log(todoLists)
+    }, [todoLists])
 
+    const getTasksRorToDoList = (todolist: TodoListType) => {
+        switch (todolist.filter) {
+            case "active":
+                return tasks[todolist.id].filter(t => !t.isDone)
+            case "completed":
+                return tasks[todolist.id].filter(t => t.isDone)
+            default:
+                return tasks[todolist.id]
         }
     }
-
-
     //UI:
 
     // let tasksForToDoList = tasks
@@ -124,19 +140,22 @@ function App() { //class components
                 title={tl.title}
                 tasks={tasks}
                 removeTask={removeTask}
-                changeFilter={changeFilter}
+                changeFilter={changeToDoListFilter}
                 addTask={addTask}
-                changeStatus={changeStatus}
+                changeStatus={changeTaskStatus}
                 filter={tl.filter}
                 todoListId={tl.id}
                 key={tl.id}
                 removeTodoList={removeTodoList}
+                changeTaskTitle={changeTaskTitle}
+                changeToDoListTitle={changeToDoListTitle}
             />
         )
     })
 
     return (
         <div className="App">
+            <AddItemForm addItem={addTodoList}/>
             {todoListsComponents}
         </div>
     );
