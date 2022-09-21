@@ -26,23 +26,39 @@ type TodoListPropsType = {
 
 const TodoList = (props: TodoListPropsType) => {
 
-    const tasksItems = props.tasks.length
-        ? props.tasks.map(task => {
-            const changeTaskTitle = (title: string) => {
-                props.changeTaskTitle(task.id, title, props.todoListId)
-            }
-            return (
-                <li key={task.id} className={task.isDone ? "isDone" : ""}>
-                    <input type="checkbox" checked={task.isDone} onChange={(e) =>
-                        props.changeStatus(task.id, e.currentTarget.checked, props.todoListId)}
-                    />
-                    {/*<span>{task.title}</span>*/}
-                    <EditableSpan title={task.title} changeTitle={changeTaskTitle}/>
-                    <button onClick={() => props.removeTask(task.id, props.todoListId)}>x</button>
+    const changeTaskTitle = (title: string, taskId: string) => {
+        props.changeTaskTitle(taskId, title, props.todoListId)
+    }
 
-                </li>
-            )
-        })
+    // const tasksItems = props.tasks.length
+    //     ? props.tasks.map(task => {
+    //         // const changeTaskTitle = (title: string) => {
+    //         //     props.changeTaskTitle(task.id, title, props.todoListId)
+    //         // }
+    //         return (
+    //             <li key={task.id} className={task.isDone ? "isDone" : ""}>
+    //                 <input type="checkbox" checked={task.isDone} onChange={(e) =>
+    //                     props.changeStatus(task.id, e.currentTarget.checked, props.todoListId)}
+    //                 />
+    //                 {/*<span>{task.title}</span>*/}
+    //                 <EditableSpan title={task.title} changeTitle={(title: string) => changeTaskTitle(title, task.id)}/>
+    //                 <button onClick={() => props.removeTask(task.id, props.todoListId)}>x</button>
+    //
+    //             </li>
+    //         )
+    //     })
+    const tasksItems = props.tasks.length
+        ? props.tasks.map(task => <li key={task.id} className={task.isDone ? "isDone" : ""}>
+                <input type="checkbox" checked={task.isDone} onChange={(e) =>
+                    props.changeStatus(task.id, e.currentTarget.checked, props.todoListId)}
+                />
+                {/*<span>{task.title}</span>*/}
+                <EditableSpan title={task.title} changeTitle={(title: string) => changeTaskTitle(title, task.id)}/>
+                <button onClick={() => props.removeTask(task.id, props.todoListId)}>x</button>
+
+            </li>
+        )
+
         : <span>Tasks list is empty</span>
 
 
