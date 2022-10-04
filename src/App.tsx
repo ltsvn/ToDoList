@@ -9,7 +9,7 @@ import {Menu} from "@material-ui/icons";
 //CLI
 //GUI => CreateReadUpdateD
 export type FilterValueType = 'all' | 'active' | 'completed'
-type TodoListType = {
+export type TodoListType = {
     id: string
     title: string
     filter: FilterValueType
@@ -28,8 +28,9 @@ function App() { //class components
     //     {id: v1(), title: "JS&TS", isDone: true},
     //     {id: v1(), title: "REACT", isDone: false},
     // ])
+
     const [filter, setFilter] = useState<FilterValueType>('all')
-//
+
     const todoListId_1 = v1()
     const todoListId_2 = v1()
 
@@ -50,6 +51,8 @@ function App() { //class components
         ]
     })
 
+
+//task CRUD
     const removeTask = (taskId: string, todoListId: string) => {
         // const todoListsTasks = tasks[todoListId]
         // const updatedTasks = todoListsTasks.filter(t => t.id !== taskId)
@@ -91,30 +94,31 @@ function App() { //class components
         setTasks({...tasks, [todoListId]: tasks[todoListId].map(t => t.id === taskId ? {...t, title} : t)})
     }
 
+//todoLists CRUD
     const changeToDoListFilter = (filter: FilterValueType, todoListId: string) => {
         setTodoLists(todoLists.map(tl => tl.id === todoListId ? {...tl, filter: filter} : tl))
 
         // setFilter(filter)
     }
     const changeToDoListTitle = (title: string, todoListId: string) => {
-        setTodoLists(todoLists.map(tl => tl.id === todoListId ? {...tl, filter: filter} : tl))
+        setTodoLists(todoLists.map(tl => tl.id === todoListId ? {...tl, title: title} : tl))
         // setFilter(filter)
     }
-
     const addTodoList = (title: string) => {
         const newTodoListId: string = v1()
         setTodoLists([...todoLists, {id: newTodoListId, title: title, filter: 'all'}])
         setTasks({...tasks, [newTodoListId]: []})
     }
-
     const removeTodoList = (todoListId: string) => {
         setTodoLists(todoLists.filter(tl => tl.id !== todoListId))
     }
 
-    useEffect(() => {
-        console.log(todoLists)
-    }, [todoLists])
+    // useEffect(() => {
+    //     console.log(todoLists)
+    // }, [todoLists])
 
+
+    //UI:
     const getTasksRorToDoList = (todolist: TodoListType) => {
         switch (todolist.filter) {
             case "active":
@@ -125,15 +129,6 @@ function App() { //class components
                 return tasks[todolist.id]
         }
     }
-    //UI:
-
-    // let tasksForToDoList = tasks
-    // if (filter === 'active') {
-    //     tasksForToDoList = tasks.filter(t => !t.isDone)
-    // }
-    // if (filter === 'completed') {
-    //     tasksForToDoList = tasks.filter(t => t.isDone)
-    // }
 
     const todoListsComponents = todoLists.map(tl => {
         const tasks = getTasksRorToDoList(tl)
