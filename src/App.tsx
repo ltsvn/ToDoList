@@ -16,7 +16,7 @@ export type TodoListType = {
 
 }
 
-type TasksStateType = {
+export type TasksStateType = {
     [todoListId: string]: TaskType[]
 }
 
@@ -29,7 +29,7 @@ function App() { //class components
     //     {id: v1(), title: "REACT", isDone: false},
     // ])
 
-    const [filter, setFilter] = useState<FilterValueType>('all')
+    //  const [filter, setFilter] = useState<TasksStateType>('all')
 
     const todoListId_1 = v1()
     const todoListId_2 = v1()
