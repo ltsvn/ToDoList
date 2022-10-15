@@ -42,7 +42,6 @@ export const tasksReducer = (state: TasksStateType, action: ActionType): TasksSt
                     title: action.payload.title
                 } : t)
             }
-
         default:
             return state
     }
