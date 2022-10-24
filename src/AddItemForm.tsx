@@ -26,6 +26,7 @@ export const AddItemForm = (props: AddItemFormType) => {
     const addItem = () => {
         const trimmedTitle = title.trim()
         if (trimmedTitle) {
+            console.log("TITLE", trimmedTitle)
             props.addItem(trimmedTitle)
         } else {
             setError(true)

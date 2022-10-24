@@ -28,6 +28,7 @@ type TodoListPropsType = {
 
 
 const TodoList = (props: TodoListPropsType) => {
+    console.log("PROPS", props)
 
     const changeTaskTitle = (title: string, taskId: string) => {
         props.changeTaskTitle(taskId, title, props.todoListId)
