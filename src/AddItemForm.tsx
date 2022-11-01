@@ -1,12 +1,12 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import React, {ChangeEvent, KeyboardEvent, memo, useState} from 'react';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import {IconButton, TextField} from "@material-ui/core";
 
 type AddItemFormType = {
     addItem: (title: string) => void
 }
+export const AddItemForm = memo((props: AddItemFormType) => {
 
-export const AddItemForm = (props: AddItemFormType) => {
     const [title, setTitle] = useState<string>(' ')
 
     const changeTitle = (e: ChangeEvent<HTMLInputElement>) => {
@@ -26,7 +26,6 @@ export const AddItemForm = (props: AddItemFormType) => {
     const addItem = () => {
         const trimmedTitle = title.trim()
         if (trimmedTitle) {
-            console.log("TITLE", trimmedTitle)
             props.addItem(trimmedTitle)
         } else {
             setError(true)
@@ -52,6 +51,6 @@ export const AddItemForm = (props: AddItemFormType) => {
             {/*{userMessage}*/}
         </div>
     );
-};
+});
 
 export default AddItemForm;

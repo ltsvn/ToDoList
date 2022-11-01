@@ -1,4 +1,4 @@
-import React, {useEffect, useReducer, useState} from 'react';
+import React, {useCallback, useEffect, useReducer, useState} from 'react';
 import './App.css';
 import TodoList, {TaskType} from "./TodoList";
 import {v1} from "uuid";
@@ -40,42 +40,41 @@ function AppWithRedux() {
     const dispatch = useDispatch()
 
 //task CRUD
-    const removeTask = (taskId: string, todoListId: string) => {
+    const removeTask = useCallback((taskId: string, todoListId: string) => {
         dispatch(removeTaskAC(taskId, todoListId))
-    }
+    }, [dispatch])
 
-    const addTask = (title: string, todoListId: string) => {
+    const addTask = useCallback((title: string, todoListId: string) => {
         dispatch(addTaskAC(title, todoListId))
-    }
+    }, [dispatch])
 
-    const changeTaskStatus = (taskId: string, isDone: boolean, todoListId: string) => {
+    const changeTaskStatus = useCallback((taskId: string, isDone: boolean, todoListId: string) => {
         dispatch(changeTaskStatusAC(taskId, isDone, todoListId))
-    }
+    }, [dispatch])
 
-    const changeTaskTitle = (taskId: string, title: string, todoListId: string) => {
+    const changeTaskTitle = useCallback((taskId: string, title: string, todoListId: string) => {
         dispatch(changeTaskTitleAC(taskId, title, todoListId))
-    }
+    }, [dispatch])
 
 //todoLists CRUD
-    const changeToDoListFilter = (filter: FilterValueType, todoListId: string) => {
+    const changeToDoListFilter = useCallback((filter: FilterValueType, todoListId: string) => {
         dispatch(ChangeTodoListFilterAC(filter, todoListId))
-    }
+    }, [dispatch])
 
-    const changeToDoListTitle = (title: string, todoListId: string) => {
+    const changeToDoListTitle = useCallback((title: string, todoListId: string) => {
         dispatch(ChangeTodoListTitleAC(title, todoListId))
-    }
+    }, [dispatch])
 
-    const addTodoList = (title: string) => {
+    const addTodoList = useCallback((title: string) => {
         dispatch(AddTodoListAC(title))
-    }
+    }, [dispatch])
 
-    const removeTodoList = (todoListId: string) => {
+    const removeTodoList = useCallback((todoListId: string) => {
         dispatch(RemoveTodoListAC(todoListId))
-    }
+    }, [dispatch])
 
     //UI:
     const getTasksRorToDoList = (todolist: TodoListType) => {
-        console.log('TL', todolist)
         switch (todolist.filter) {
             case "active":
                 return tasks[todolist.id].filter(t => !t.isDone)

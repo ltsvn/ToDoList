@@ -1,10 +1,11 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import React, {ChangeEvent, KeyboardEvent, memo, useCallback, useState} from 'react';
 import {FilterValueType} from "./App";
 import AddItemForm from "./AddItemForm";
 import EditableSpan from "./EditableSpan";
 import {Button, ButtonGroup, Checkbox, FormControlLabel, IconButton, List, ListItem} from "@material-ui/core";
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import {Favorite, FavoriteBorder} from "@material-ui/icons";
+import {Task} from "./Task";
 
 export type TaskType = {
     id: string
@@ -27,37 +28,12 @@ type TodoListPropsType = {
 }
 
 
-const TodoList = (props: TodoListPropsType) => {
-    console.log("PROPS", props)
+const TodoList = memo((props: TodoListPropsType) => {
+    console.log('TodoList')
 
-    const changeTaskTitle = (title: string, taskId: string) => {
-        props.changeTaskTitle(taskId, title, props.todoListId)
-    }
-
-    const tasksItems = props.tasks.length
-        ? props.tasks.map(task => <ListItem style={{padding: 0}} key={task.id} className={task.isDone ? "isDone" : ""}>
-                {/*<Checkbox style={{color: 'hotpink'}} checked={task.isDone} onChange={(e) =>*/}
-                {/*    props.changeStatus(task.id, e.currentTarget.checked, props.todoListId)}/>*/}
-                <FormControlLabel
-                    control={<Checkbox icon={<FavoriteBorder/>} checkedIcon={<Favorite/>} name="checkedH"
-                                       checked={task.isDone} onChange={(e) =>
-                        props.changeStatus(task.id, e.currentTarget.checked, props.todoListId)}/>}
-                    label=""
-                />
-                {/*<span>{task.title}</span>*/}
-                <EditableSpan title={task.title} changeTitle={(title: string) => changeTaskTitle(title, task.id)}/>
-                <IconButton style={{color: 'primary'}} onClick={() => props.removeTask(task.id, props.todoListId)}>
-                    <HighlightOffIcon/>
-                </IconButton>
-            </ListItem>
-        )
-
-        : <span>Tasks list is empty</span>
-
-
-    const addTask = (title: string) => {
+    const addTask = useCallback((title: string) => {
         props.addTask(title, props.todoListId)
-    }
+    }, [props.addTask, props.todoListId])
 
     const handlerCreator = (filter: FilterValueType, todoListId: string) => {
         return () => props.changeFilter(filter, todoListId)
@@ -66,6 +42,20 @@ const TodoList = (props: TodoListPropsType) => {
     const changeTodoListTitle = (title: string) => {
         props.changeToDoListTitle(title, props.todoListId)
     }
+
+    let tasksForTodolist = props.tasks;
+
+    if (props.filter === 'active') {
+        tasksForTodolist = tasksForTodolist.filter(t => t.isDone === false)
+    }
+    if (props.filter === 'completed') {
+        tasksForTodolist = tasksForTodolist.filter(t => t.isDone === true)
+    }
+
+    const tasksItems = props.tasks.length ? tasksForTodolist.map(task => <Task key={task.id} changeStatus={} task={}
+                                                                               removeTask={} changeTaskTitle={}/>) :
+        <span>Tasks list is empty</span>
+
 
     return (
         <div>
@@ -98,6 +88,6 @@ const TodoList = (props: TodoListPropsType) => {
             </ButtonGroup>
         </div>
     );
-};
+});
 
 export default TodoList;
