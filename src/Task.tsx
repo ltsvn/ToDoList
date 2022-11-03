@@ -8,12 +8,12 @@ import {TaskType} from "./TodoList";
 export type TaskPropsType = {
     task: TaskType
     removeTask: (taskID: string) => void
-    changeStatus: (taskID: string, isDone: boolean) => void
+    changeTaskStatus: (taskID: string, isDone: boolean) => void
     changeTaskTitle: (taskId: string, title: string) => void
 }
 
-export const Task = memo(({task, changeTaskTitle, changeStatus, removeTask}: TaskPropsType) => {
-
+export const Task = memo(({task, changeTaskTitle, changeTaskStatus, removeTask}: TaskPropsType) => {
+    console.log('task')
     const changeTaskTitleHnd = (title: string, taskId: string) => {
         changeTaskTitle(taskId, title)
     }
@@ -22,7 +22,7 @@ export const Task = memo(({task, changeTaskTitle, changeStatus, removeTask}: Tas
 
     const onTitleChangeHandler = (title: string) => changeTaskTitleHnd(title, task.id)
 
-    const onStatusChangeHandler = (e: ChangeEvent<HTMLInputElement>) => changeStatus(task.id, e.currentTarget.checked)
+    const onStatusChangeHandler = (e: ChangeEvent<HTMLInputElement>) => changeTaskStatus(task.id, e.currentTarget.checked)
 
 
     return (
